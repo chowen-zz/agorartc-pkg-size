@@ -2,6 +2,7 @@
 agora sdk包体计算：标准版本&特殊版本
 ## 1.前提条件
 Android:Android studio 4.2 及以上、JDK11
+
 IOS:Xcode 13.0 或以上版本
 
 ## 2.使用参考help
