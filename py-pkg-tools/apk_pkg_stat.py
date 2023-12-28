@@ -49,6 +49,26 @@ def modify_sdk_version(sdk_version):
         gradle_file.seek(0)
         gradle_file.write(gradle_file_content)
         gradle_file.close()
+    elif 'agora-special-full:' in gradle_file_content:
+        print('current sdk version:io.agora.rtc:agora-special-full:'+sdk_version+'')
+        sdk_path = f'io.agora.rtc:agora-special-full:{sdk_version}' 
+        gradle_file_content = gradle_file_content.replace('agora-special-full:', 'agora-special-full:%s' % sdk_version)
+        # print(f'chowen gradle_file_content: %s'% gradle_file_content)
+        gradle_file.seek(0)
+        gradle_file.write(gradle_file_content)
+        gradle_file.close()
+
+    elif 'agora-special-voice:' in gradle_file_content:
+        print('current sdk version:io.agora.rtc:agora-special-voice:'+sdk_version+'')
+        sdk_path = f'io.agora.rtc:agora-special-voice:{sdk_version}' 
+        gradle_file_content = gradle_file_content.replace('agora-special-voice:', 'agora-special-voice:%s' % sdk_version)
+        # print(f'chowen gradle_file_content: %s'% gradle_file_content)
+        gradle_file.seek(0)
+        gradle_file.write(gradle_file_content)
+        gradle_file.close()
+
+    else:
+        print('moudle type error! pls check it. --> python3 apk_pkg_stat.py -h')
 
 def revert_gradle_content(origin_gradle_path, copy_gradle_path):
     with open(origin_gradle_path, 'w+', encoding='utf-8') as gradle_file, open(copy_gradle_path, 'r+', encoding='utf-8') as gradle_file_copy:
@@ -57,8 +77,7 @@ def revert_gradle_content(origin_gradle_path, copy_gradle_path):
         gradle_file.seek(0)
         gradle_file.write(replace_gradle)
 
- #计算包体 (so对比）
-def computer_apk_size(sdk_type, sdk_version):
+def computer_aar_so_size(file_type, sdk_version):
     print('-' * 45)
     print(f'Execute Build assembleRelease--agorartc version:{sdk_version}')
     os.system(
@@ -70,22 +89,6 @@ def computer_apk_size(sdk_type, sdk_version):
     print('-----agorartc calculate-----\n DataTime %s' % date_now)
     print('sdk_path:%s' % sdk_path)
     time.sleep(4)
-
-    v8_apk_size = os.path.getsize(
-            f'{os.path.abspath(root_path)}/android/app/build/outputs/apk/release/app-arm64-v8a-release-unsigned.apk')
-    v7_apk_size = os.path.getsize(
-            f'{os.path.abspath(root_path)}/android/app/build/outputs/apk/release/app-armeabi-v7a-release-unsigned.apk')
-
-    apk_v8_str = f'apk_v8_size:{round(v8_apk_size / 1000.0 / 1000.0, 2)}M--agorartc_so_v8_size:{round((v8_apk_size - origin_apk_size) / 1000.0 / 1000.0, 2)}M'
-    apk_v7_str = f'apk_v7_size:{round(v7_apk_size / 1000.0 / 1000.0, 2)}M--agorartc_so_v7_size:{round((v7_apk_size - origin_apk_size) / 1000.0 / 1000.0 , 2)}M'
-    print(f'agorartc sdk version:{sdk_version}')
-    print(f'origin_apk_size:{origin_apk_size}')
-    print(apk_v8_str)
-    print(apk_v7_str)
-    print(f'-----calculate done-----')
-    print('\033[0m')
-    save_file_for_so(sdk_type, sdk_version, apk_v7_str, apk_v8_str)
-    return [v7_apk_size, v8_apk_size]
 
     if file_type == 'so':
         v8_apk_size = os.path.getsize(
@@ -121,6 +124,36 @@ def computer_apk_size(sdk_type, sdk_version):
         return [aar_apk_size]
     else:
         print('no pkg type, pls input pkg type')
+
+ #计算包体 (so对比）
+def computer_apk_size(sdk_type, sdk_version):
+    print('-' * 45)
+    print(f'Execute Build assembleRelease--agorartc version:{sdk_version}')
+    os.system(
+        f'cd {os.path.abspath(root_path)}/android && {os.path.abspath(root_path)}/android/gradlew clean && {os.path.abspath(root_path)}/android/gradlew assembleRelease')
+
+    print('\033[32m')
+    # print('空工程 1.4M')
+    date_now = datetime.datetime.now()
+    print('-----agorartc calculate-----\n DataTime %s' % date_now)
+    print('sdk_path:%s' % sdk_path)
+    time.sleep(4)
+
+    v8_apk_size = os.path.getsize(
+            f'{os.path.abspath(root_path)}/android/app/build/outputs/apk/release/app-arm64-v8a-release-unsigned.apk')
+    v7_apk_size = os.path.getsize(
+            f'{os.path.abspath(root_path)}/android/app/build/outputs/apk/release/app-armeabi-v7a-release-unsigned.apk')
+
+    apk_v8_str = f'apk_v8_size:{round(v8_apk_size / 1000.0 / 1000.0, 2)}M--agorartc_so_v8_size:{round((v8_apk_size - origin_apk_size) / 1000.0 / 1000.0, 2)}M'
+    apk_v7_str = f'apk_v7_size:{round(v7_apk_size / 1000.0 / 1000.0, 2)}M--agorartc_so_v7_size:{round((v7_apk_size - origin_apk_size) / 1000.0 / 1000.0 , 2)}M'
+    print(f'agorartc sdk version:{sdk_version}')
+    print(f'origin_apk_size:{origin_apk_size}')
+    print(apk_v8_str)
+    print(apk_v7_str)
+    print(f'-----calculate done-----')
+    print('\033[0m')
+    save_file_for_so(sdk_type, sdk_version, apk_v7_str, apk_v8_str)
+    return [v7_apk_size, v8_apk_size]
 
 def calculate_origin_apk():
     gradle_path_copy = f'{os.path.abspath(root_path)}/android/app/build.gradle.copy'
@@ -176,24 +209,39 @@ def modify_gradle(pkg_type, sdk_version):
         gradle_path_voicebasic = f'{os.path.abspath(root_path)}/android/app/build.gradle.voicebasic'
         revert_gradle_content(gradle_path_origin, gradle_path_voicebasic) # step 2
         modify_sdk_version(sdk_version) 
+    elif pkg_type == 'specialfull':
+        gradle_path_specialfull = f'{os.path.abspath(root_path)}/android/app/build.gradle.specialfull'
+        revert_gradle_content(gradle_path_origin, gradle_path_specialfull) # step 2
+        modify_sdk_version(sdk_version) 
+
+    elif pkg_type == 'specialvoice':
+        gradle_path_specialvoice = f'{os.path.abspath(root_path)}/android/app/build.gradle.specialvoice'
+        revert_gradle_content(gradle_path_origin, gradle_path_specialvoice)
+        modify_sdk_version(sdk_version)
 
 if __name__ == '__main__':
     # cmd:
     # python3 apk_pkg_stat.py sdkver sdkver2 full/fullbasic/voicefull/voicebasic
     # python3 apk_pkg_stat.py sdkver full/fullbasic/voicefull/voicebasic
-
+    
     # implementation 'io.agora.rtc:voice-sdk:4.2.3' 
     # implementation 'io.agora.rtc:voice-rtc-basic:4.2.3' 
     # implementation 'io.agora.rtc:full-sdk:4.2.3' 
     # implementation 'io.agora.rtc:full-rtc-basic:4.2.3' 
+    
+    # special
+    # implementation 'io.agora.rtc:agora-special-voice:4.1.1.23'
+    # implementation 'io.agora.rtc:agora-special-full:4.1.1.23'
 
     if sys.argv[1] == '-h':
         print('\033[32m')
         print('-'*80)
-        print('一.两版本对比：python3 apk_pkg_stat.py 版本号1 版本号2 包类型[voice-sdk/voice-rtc-basic/full-sdk/full-rtc-basic]')
-        print('   例如：python3 apk_pkg_stat.py  4.1.0  4.2.0  voice-sdk/voice-rtc-basic/full-sdk/full-rtc-basic')
-        print('二.单独版本：python3 apk_pkg_stat.py 版本号 包类型[voice-sdk/voice-rtc-basic/full-sdk/full-rtc-basic]')
-        print('   例如：python3 apk_pkg_stat.py 4.1.0 voice-sdk/voice-rtc-basic/full-sdk/full-rtc-basic')
+        print('一.两版本对比：python3 apk_pkg_stat.py 版本号1 版本号2 包类型[full/fullbasic/voicebasic/voicefull]')
+        print('   例如：python3 apk_pkg_stat.py  4.2.0  4.2.3  full/fullbasic/voicebasic/voicefull')
+        print('二.单独版本：python3 apk_pkg_stat.py 版本号 包类型[full/fullbasic/voicebasic/voicefull]')
+        print('   例如：python3 apk_pkg_stat.py 4.2.0 full/fullbasic/voicebasic/voicefull')
+        print('三.特殊版本：python3 apk_pkg_stat.py 版本号 包类型[specialfull/specialvoice]')
+        print('   例如：python3 apk_pkg_stat.py 4.1.1.19 specialfull/specialvoice')
         print('-' * 80)
         print('\033[0m')
         exit()
@@ -229,7 +277,7 @@ if __name__ == '__main__':
         computer_apk_size(pkg_type, sdk_version)
         pass
     else:
-        print('input error, pls checkout it!')
+        print('input error, pls checkout it! --> python3 apk_pkg_stat.py -h')
 
     # clean build
     time.sleep(2)
