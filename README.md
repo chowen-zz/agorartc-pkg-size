@@ -1,4 +1,4 @@
-# AgoraSdkPkg
+# AgoraSdk计算包体工具
 agora sdk包体计算：标准版本&特殊版本
 ## 1.前提条件
 Android:Android studio 4.2 及以上、JDK11
