@@ -24,3 +24,7 @@ python3 apk_pkg_stat.py 版本号 包类型[full/fullbasic/voicebasic/voicefull]
 python3 apk_pkg_stat.py 版本号 包类型[specialfull/specialvoice]
   
    例如：python3 apk_pkg_stat.py 4.1.1.19 specialfull/specialvoice
+   
+## 四.跑完结果
+结果会生产文件，目录：../agorartc-pkg-size/py-pkg-tools/apk_size_info
+<img width="639" alt="image" src="https://github.com/chowen-zz/agorartc-pkg-size/assets/6028309/bc15467b-62c8-48f2-a129-ac1efa2da5aa">
