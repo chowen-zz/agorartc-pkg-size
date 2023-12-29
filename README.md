@@ -7,6 +7,7 @@ IOS:Xcode 13.0及以上版本、Cocoapods（参考：https://guides.cocoapods.or
 
 ## 2.使用参考help
 python3 apk_pkg_stat.py -h
+
 <img width="716" alt="image" src="https://github.com/chowen-zz/agorartc-pkg-size/assets/6028309/fea7cc92-6983-4e8d-8e85-8389a558fb5e">
 
 
