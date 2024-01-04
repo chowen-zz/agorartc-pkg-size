@@ -96,8 +96,8 @@ def computer_aar_so_size(file_type, sdk_version):
         v7_apk_size = os.path.getsize(
             f'{os.path.abspath(root_path)}/android/app/build/outputs/apk/release/app-armeabi-v7a-release-unsigned.apk')
 
-        apk_v8_str = f'apk_v8_size:{v8_apk_size}--agorartc_so_v8_size:{round((v8_apk_size - origin_apk_size) / 1000.0 / 1000.0, 2)}M'
-        apk_v7_str = f'apk_v7_size:{v7_apk_size}--agorartc_so_v7_size:{round((v7_apk_size - origin_apk_size) / 1000.0 / 1000.0 , 2)}M'
+        apk_v8_str = f'apk_v8_size:{v8_apk_size}--agorartc_v8_size:{round((v8_apk_size - origin_apk_size) / 1000.0 / 1000.0, 2)}M'
+        apk_v7_str = f'apk_v7_size:{v7_apk_size}--agorartc_v7_size:{round((v7_apk_size - origin_apk_size) / 1000.0 / 1000.0 , 2)}M'
         # apk_v8_str = f'apk_v8_size:{v8_apk_size}M--agorartc_so_v8_size:{round((v8_apk_size - origin_apk_size) / 1000.0 / 1000.0, 2)}M'
         # apk_v7_str = f'apk_v7_size:{v8_apk_size}M--agorartc_so_v7_size:{round((v7_apk_size - origin_apk_size) / 1000.0 / 1000.0, 2)}M'
         print(f'agorartc sdk version:{sdk_version}')
@@ -144,8 +144,8 @@ def computer_apk_size(sdk_type, sdk_version):
     v7_apk_size = os.path.getsize(
             f'{os.path.abspath(root_path)}/android/app/build/outputs/apk/release/app-armeabi-v7a-release-unsigned.apk')
 
-    apk_v8_str = f'apk_v8_size:{round(v8_apk_size / 1000.0 / 1000.0, 2)}M--agorartc_so_v8_size:{round((v8_apk_size - origin_apk_size) / 1000.0 / 1000.0, 2)}M'
-    apk_v7_str = f'apk_v7_size:{round(v7_apk_size / 1000.0 / 1000.0, 2)}M--agorartc_so_v7_size:{round((v7_apk_size - origin_apk_size) / 1000.0 / 1000.0 , 2)}M'
+    apk_v8_str = f'apk_v8_size:{round(v8_apk_size / 1000.0 / 1000.0, 2)}M--agorartc_v8_size:{round((v8_apk_size - origin_apk_size) / 1000.0 / 1000.0, 2)}M'
+    apk_v7_str = f'apk_v7_size:{round(v7_apk_size / 1000.0 / 1000.0, 2)}M--agorartc_v7_size:{round((v7_apk_size - origin_apk_size) / 1000.0 / 1000.0 , 2)}M'
     print(f'agorartc sdk version:{sdk_version}')
     print(f'origin_apk_size:{origin_apk_size}')
     print(apk_v8_str)
