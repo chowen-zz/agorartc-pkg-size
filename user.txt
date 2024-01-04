@@ -1,1 +1,2 @@
-username=zhouwen@agora.io
+username=agora.io
+
