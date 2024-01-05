@@ -96,12 +96,12 @@ def computer_aar_so_size(file_type, sdk_version):
         v7_apk_size = os.path.getsize(
             f'{os.path.abspath(root_path)}/android/app/build/outputs/apk/release/app-armeabi-v7a-release-unsigned.apk')
 
-        apk_v8_str = f'apk_v8_size:{v8_apk_size}--agorartc_v8_size:{round((v8_apk_size - origin_apk_size) / 1000.0 / 1000.0, 2)}M'
-        apk_v7_str = f'apk_v7_size:{v7_apk_size}--agorartc_v7_size:{round((v7_apk_size - origin_apk_size) / 1000.0 / 1000.0 , 2)}M'
+        apk_v8_str = f'apk_v8_size:{v8_apk_size}--agorartc_v8_size:{round((v8_apk_size - origin_apk_size) / 1024.0 / 1024.0, 2)}M'
+        apk_v7_str = f'apk_v7_size:{v7_apk_size}--agorartc_v7_size:{round((v7_apk_size - origin_apk_size) / 1024.0 / 1024.0 , 2)}M'
         # apk_v8_str = f'apk_v8_size:{v8_apk_size}M--agorartc_so_v8_size:{round((v8_apk_size - origin_apk_size) / 1000.0 / 1000.0, 2)}M'
         # apk_v7_str = f'apk_v7_size:{v8_apk_size}M--agorartc_so_v7_size:{round((v7_apk_size - origin_apk_size) / 1000.0 / 1000.0, 2)}M'
         print(f'agorartc sdk version:{sdk_version}')
-        print(f'origin_apk_size:{origin_apk_size}')
+        print(f'origin_apk_size:{round(origin_apk_size/1024/1024, 2)}M')
         print(apk_v8_str)
         print(apk_v7_str)
         print(f'-----calculate done-----')
@@ -112,11 +112,11 @@ def computer_aar_so_size(file_type, sdk_version):
     elif file_type == 'aar':
         aar_apk_size = os.path.getsize(
             f'{os.path.abspath(root_path)}/android/app/build/outputs/apk/release/app-release-unsigned.apk')
-        apk_aar_str = f'origin_apk_size:{origin_apk_size}M--agorartc_aar_size:{round((aar_apk_size - origin_apk_size) / 1000.0 / 1000.0, 5)}M'
+        apk_aar_str = f'origin_apk_size:{origin_apk_size}M--agorartc_aar_size:{round((aar_apk_size - origin_apk_size) / 1024.0 / 1024.0, 5)}M'
         # apk_aar_str = f'origin_apk_size:{1.4}M--agorartc_aar_size:{round((aar_apk_size / 1000.0 / 1000.0) - 1.4 , 5)}M'
 
         print(f'agorartc sdk version:{sdk_version}')
-        print(f'origin_apk_size:{origin_apk_size}')
+        print(f'origin_apk_size:{origin_apk_size}M')
         print(apk_aar_str)
         print(f'-----calculate done-----')
         save_file_for_aar(sdk_version, apk_aar_str)
@@ -144,10 +144,10 @@ def computer_apk_size(sdk_type, sdk_version):
     v7_apk_size = os.path.getsize(
             f'{os.path.abspath(root_path)}/android/app/build/outputs/apk/release/app-armeabi-v7a-release-unsigned.apk')
 
-    apk_v8_str = f'apk_v8_size:{round(v8_apk_size / 1000.0 / 1000.0, 2)}M--agorartc_v8_size:{round((v8_apk_size - origin_apk_size) / 1000.0 / 1000.0, 2)}M'
-    apk_v7_str = f'apk_v7_size:{round(v7_apk_size / 1000.0 / 1000.0, 2)}M--agorartc_v7_size:{round((v7_apk_size - origin_apk_size) / 1000.0 / 1000.0 , 2)}M'
+    apk_v8_str = f'apk_v8_size:{round(v8_apk_size / 1024.0 / 1024.0, 2)}M--agorartc_v8_size:{round((v8_apk_size - origin_apk_size) / 1024.0 / 1024.0, 2)}M'
+    apk_v7_str = f'apk_v7_size:{round(v7_apk_size / 1024.0 / 1024.0, 2)}M--agorartc_v7_size:{round((v7_apk_size - origin_apk_size) / 1024.0 / 1024.0 , 2)}M'
     print(f'agorartc sdk version:{sdk_version}')
-    print(f'origin_apk_size:{origin_apk_size}')
+    print(f'origin_apk_size:{round(origin_apk_size/1024/1024, 2)}M')
     print(apk_v8_str)
     print(apk_v7_str)
     print(f'-----calculate done-----')
@@ -177,7 +177,7 @@ def save_file_for_so(file_type, sdk_version, apk_v7_str='', apk_v8_str=''):
         s_file.write('----Date:%s' %str(date_now) + '--Name:%s' %user_name)
         s_file.write('\n'+ 'agorartc SDK path:%s' % sdk_path)
         s_file.write('\n' + 'agorartc SDK Ver:%s' %sdk_version)
-        s_file.write('\n' + f'origin_apk_size:{origin_apk_size}')
+        s_file.write('\n' + f'origin_apk_size:{round(origin_apk_size/1024.0/1024.0, 2)}M')
         s_file.write('\n' + apk_v7_str + '\n' + apk_v8_str + '\n')
         s_file.write(str('-' * 20))
 
@@ -188,7 +188,7 @@ def save_file_for_aar(sdk_version, apk_aar_str=''):
         text = user_info.read()
         user_name = text[text.find('username=') + 9: text.find('\n')]
         s_file.write('\n' + 'agorartc Version:%s' %sdk_version + 'Date:%s' %str(date_now) + '--Name:%s' %user_name)
-        s_file.write('\n' + f'origin_apk_size:{origin_apk_size}')
+        s_file.write('\n' + f'origin_apk_size:{round(origin_apk_size/1024.0/1024.0, 2)}M')
         s_file.write('\n' + apk_aar_str + '\n')
         s_file.write(str('-' * 20))
 
@@ -247,10 +247,10 @@ if __name__ == '__main__':
         exit()
 
     gradle_path_origin = f'{os.path.abspath(root_path)}/android/app/build.gradle'
-    print(f'chow_path:{gradle_path_origin}')
+    # print(f'chow_path:{gradle_path_origin}')
     # 计算原始apk大小
     origin_apk_size = calculate_origin_apk()
-    print(f'origin_apk_size:{origin_apk_size}')
+    print(f'origin_apk_size:{round(origin_apk_size/1024.0/1024.0, 2)}M')
 
     print(f'sys.argv:{len(sys.argv)}')
 
@@ -270,9 +270,8 @@ if __name__ == '__main__':
     elif len(sys.argv) == 3:
         pkg_type = sys.argv[2]
         sdk_version = sys.argv[1]
-        print(f"chowe pkg:{pkg_type}")
-        print(f"chowen sdk_version:{sdk_version}")
-
+        # print(f"chowe pkg:{pkg_type}")
+        # print(f"chowen sdk_version:{sdk_version}")
         modify_gradle(pkg_type, sdk_version)
         computer_apk_size(pkg_type, sdk_version)
         pass
