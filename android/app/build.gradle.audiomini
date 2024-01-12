@@ -39,7 +39,7 @@ android {
 }
 
 dependencies {
-    implementation 'io.agora.rtc:agora-special-full:4.1.1.21.MINI.VIDEO'
+    implementation 'io.agora.rtc:agora-special-voice-mini:'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
 }

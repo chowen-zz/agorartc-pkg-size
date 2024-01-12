@@ -67,6 +67,28 @@ def modify_sdk_version(sdk_version):
         gradle_file.write(gradle_file_content)
         gradle_file.close()
 
+    elif 'agora-special-voice-mini:' in gradle_file_content:
+        sdk_path = f'io.agora.rtc:agora-special-voice:{sdk_version}.MINI.AUDIO'
+        print('zw current sdk version:%s' % sdk_path)
+        audio_type = '.MINI.AUDIO'
+        replace_str = f'agora-special-voice:{sdk_version}{audio_type}'
+        gradle_file_content = gradle_file_content.replace('agora-special-voice-mini:', replace_str)
+        # print(f'chowen gradle_file_content: %s'% gradle_file_content)
+        gradle_file.seek(0)
+        gradle_file.write(gradle_file_content)
+        gradle_file.close()
+
+    elif 'agora-special-full-mini:' in gradle_file_content:
+        sdk_path = f'io.agora.rtc:agora-special-full:{sdk_version}.MINI.VIDEO' 
+        print('zw current sdk version:%s' % sdk_path)
+        audio_type = '.MINI.VIDEO'
+        replace_str = f'agora-special-full:{sdk_version}{audio_type}'
+        gradle_file_content = gradle_file_content.replace('agora-special-full-mini:', replace_str)
+        # print(f'chowen gradle_file_content: %s'% gradle_file_content)
+        gradle_file.seek(0)
+        gradle_file.write(gradle_file_content)
+        gradle_file.close()
+
     else:
         print('moudle type error! pls check it. --> python3 apk_pkg_stat.py -h')
 
@@ -218,6 +240,16 @@ def modify_gradle(pkg_type, sdk_version):
         gradle_path_specialvoice = f'{os.path.abspath(root_path)}/android/app/build.gradle.specialvoice'
         revert_gradle_content(gradle_path_origin, gradle_path_specialvoice)
         modify_sdk_version(sdk_version)
+    
+    elif pkg_type == 'videomini':
+        gradle_path_videomini = f'{os.path.abspath(root_path)}/android/app/build.gradle.videomini'
+        revert_gradle_content(gradle_path_origin, gradle_path_videomini)
+        modify_sdk_version(sdk_version)
+
+    elif pkg_type == 'audiomini':
+        gradle_path_audiomini = f'{os.path.abspath(root_path)}/android/app/build.gradle.audiomini'
+        revert_gradle_content(gradle_path_origin, gradle_path_audiomini)
+        modify_sdk_version(sdk_version)
 
 if __name__ == '__main__':
     # cmd:
@@ -242,6 +274,8 @@ if __name__ == '__main__':
         print('   例如：python3 apk_pkg_stat.py 4.2.0 full/fullbasic/voicebasic/voicefull')
         print('三.特殊版本：python3 apk_pkg_stat.py 版本号 包类型[specialfull/specialvoice]')
         print('   例如：python3 apk_pkg_stat.py 4.1.1.19 specialfull/specialvoice')
+        print('四.版本：python3 apk_pkg_stat.py 版本号 包类型[videomini/audiomini]注意:mini包需要单独上传')
+        print('   例如：python3 apk_pkg_stat.py 4.1.1.19 videomini/audiomini')
         print('-' * 80)
         print('\033[0m')
         exit()
@@ -272,6 +306,10 @@ if __name__ == '__main__':
         sdk_version = sys.argv[1]
         # print(f"chowe pkg:{pkg_type}")
         # print(f"chowen sdk_version:{sdk_version}")
+        # replace_str = 'io.agora.rtc:agora-special-voice:%s' % sdk_version + '.MINI.AUDIO'
+        # audio_type = '.MINI.AUDIO'
+        # replace_str = f'agora-special-voice:{sdk_version}{audio_type}'
+        # print(replace_str)
         modify_gradle(pkg_type, sdk_version)
         computer_apk_size(pkg_type, sdk_version)
         pass
